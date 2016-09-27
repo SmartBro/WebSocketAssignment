@@ -1,7 +1,8 @@
 const join = require('path').join;
 const webpack = require('webpack');
 const HtmlPlugin = require('html-webpack-plugin');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
     entry: join(__dirname, 'src/app.js'),
@@ -13,7 +14,13 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /.js$/, loader: 'babel-loader', exclude: /node_modules/ }
+            { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
+            { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css-loader!postcss-loader') },
+            { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css-loader!postcss-loader!sass-loader') },
+            {
+                test: /\.(ttf|eot|woff|woff2|png|ico|jpg|jpeg|gif|svg)$/i,
+                loaders: [ `file?context=./&name=assets/static/[ext]/[name].[ext]` ]
+            }
         ]
     },
     plugins: [
@@ -26,8 +33,10 @@ module.exports = {
             _: "lodash",
             'React': 'react',
             'ReactDOM': 'react-dom'
-        })
+        }),
+        new ExtractTextPlugin('bundle.css')
     ],
+    devtool: 'inline-source-map',
     devServer: {
         host: 'localhost',
         port: 8080,
@@ -37,5 +46,17 @@ module.exports = {
             hot: true,
             poll: 1000
         }
-    }
+    },
+    'postcss': [
+        autoprefixer({
+            browsers: [
+                'last 3 versions',
+                'iOS >= 7',
+                'Android >= 4',
+                'Explorer >= 11',
+                'ExplorerMobile >= 11'
+            ],
+            cascade: false
+        })
+    ]
 };
