@@ -1,9 +1,10 @@
 .participants {
-  width: 100%;
+  width: calc(100% - 20px);
   height: 100%;
+  margin: 10px;
   padding: 5%;
-  background-color: #2aabd2;
-  border-radius: 15px;
+  background-color: #999;
+  box-shadow: inset 0px 2px 5px 1px rgba(0,0,0,0.5);
   white-space: normal;
 }
 
