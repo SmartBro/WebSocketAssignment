@@ -1,46 +1,39 @@
 import config from 'src/config/app.config';
 import TableList from './table-list';
+import socket from '../../shared/socket.service';
 
 class TableListWrapper extends React.Component {
     constructor (props) {
         super(props);
-        this.ws = new WebSocket(config.tablesSource);
-        this.ws.onopen = () => {
-            console.info('Connection opened!');
-            this.ws.send('Hello!');
+        this.state = {
+            tables: []
         };
-        this.ws.onclose = () => console.info('Connection closed!');
-        this.ws.onerror = () => console.error('Error!');
-        this.ws.onmessage = this.onMessage.bind(this);
+        socket.on(config.messageTypes.tableList, data => this.setState({ tables: data.tables }));
+        socket.on(config.messageTypes.tableRemoved, this.onTableRemove.bind(this));
+        socket.on(config.messageTypes.tableAdded, this.onTableAdd.bind(this));
+        socket.on(config.messageTypes.tableUpdated, this.onTableUpdate.bind(this));
     }
 
-    componentWillMount () {
-        //TODO: remove when original source ready
-        const mockTables = [
-            { name: '007' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '009' },
-            { name: '008' }
-        ];
-        this.setState({ tables: mockTables });
+    onTableAdd (data) {
+        console.log('add:', data);
+        const indexAfter = _.findIndex(this.state.tables, [ 'id', data.after_id ]);
+        const updatedTables = _.clone(this.state.tables);
+        updatedTables.splice(indexAfter, 0, data.table);
+        this.setState({ tables: updatedTables });
     }
 
-    onMessage (event) {
-        console.log('On message:', event);
+    onTableUpdate ({ table }) {
+        console.log('update:', table);
+        const tableIndex = _.findIndex(this.state.tables, [ 'id', table.id ]);
+        const updatedTables = _.clone(this.state.tables);
+        updatedTables.splice(tableIndex, 1, table);
+        this.setState({ tables: updatedTables });
+    }
+
+    onTableRemove ({ id }) {
+        console.log('remove:', id);
+        const tables = _.reject(this.state.tables, [ 'id', id ]);
+        this.setState({ tables });
     }
 
     render () {
