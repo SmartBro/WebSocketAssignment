@@ -1,4 +1,7 @@
+import style from './table.scss';
 import config from 'src/config/app.config';
+
+import { Participants } from './participants';
 
 class Table extends React.Component {
     componentWillMount () {
@@ -10,10 +13,9 @@ class Table extends React.Component {
     }
 
     render () {
-        return <div className="table">
-                {`Name: ${this.state.name}`}
-                {`Participants: ${this.state.participants}`}
-                {`Max Participants: ${this.state.maxParticipants}`}
+        return <div className={style.table}>
+                    <div className={style['table-name']}>{this.state.name}</div>
+                    <Participants participants={this.state.participants} maxParticipants={this.state.maxParticipants} />
             </div>;
     }
 }

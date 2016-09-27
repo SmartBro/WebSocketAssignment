@@ -1,0 +1,17 @@
+.participants {
+  width: 100%;
+  height: 100%;
+  padding: 5%;
+  background-color: #2aabd2;
+  border-radius: 15px;
+  white-space: normal;
+}
+
+.participant {
+  margin: 5px;
+  color: white;
+
+  &.active {
+    color: darkblue;
+  }
+}
