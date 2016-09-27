@@ -16,7 +16,7 @@ module.exports = {
         loaders: [
             { test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
             { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css-loader!postcss-loader') },
-            { test: /\.scss$/, loader: ExtractTextPlugin.extract('style', 'css-loader!postcss-loader!sass-loader') },
+            { test: /\.scss$/, loader: 'style!css?modules&sourceMap&localIdentName=[local]___[hash:base64:5]!resolve-url!sass?outputStyle=expanded&sourceMap' },
             {
                 test: /\.(ttf|eot|woff|woff2|png|ico|jpg|jpeg|gif|svg)$/i,
                 loaders: [ `file?context=./&name=assets/static/[ext]/[name].[ext]` ]
