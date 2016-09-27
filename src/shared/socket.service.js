@@ -6,7 +6,7 @@ class SocketService {
         this.ws = new WebSocket(config.tablesSource);
         this.ws.onopen = this.onOpen.bind(this);
         this.ws.onclose = () => console.info('Connection closed!');
-        this.ws.onerror = () => console.error('Error!');
+        this.ws.onerror = (error) => console.error('Error!', error);
         this.ws.onmessage = this.onMessage.bind(this);
     }
 
@@ -28,7 +28,6 @@ class SocketService {
     onMessage (event) {
         const data = JSON.parse(event.data);
         if (data && data.$type && data.$type in this.handlers) {
-            console.log('On message:', event);
             this.handlers[data.$type](data);
         } else {
             console.info('Unhandled message:', event, data);

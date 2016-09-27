@@ -15,7 +15,6 @@ class TableListWrapper extends React.Component {
     }
 
     onTableAdd (data) {
-        console.log('add:', data);
         const indexAfter = _.findIndex(this.state.tables, [ 'id', data.after_id ]);
         const updatedTables = _.clone(this.state.tables);
         updatedTables.splice(indexAfter, 0, data.table);
@@ -23,7 +22,6 @@ class TableListWrapper extends React.Component {
     }
 
     onTableUpdate ({ table }) {
-        console.log('update:', table);
         const tableIndex = _.findIndex(this.state.tables, [ 'id', table.id ]);
         const updatedTables = _.clone(this.state.tables);
         updatedTables.splice(tableIndex, 1, table);
@@ -31,7 +29,6 @@ class TableListWrapper extends React.Component {
     }
 
     onTableRemove ({ id }) {
-        console.log('remove:', id);
         const tables = _.reject(this.state.tables, [ 'id', id ]);
         this.setState({ tables });
     }
